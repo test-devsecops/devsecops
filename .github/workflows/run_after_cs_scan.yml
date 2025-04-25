@@ -1,8 +1,8 @@
 name: Run Python After Checkmarx Scan
 
 on:
-  check_suite:
-    types: [completed]
+  check_run:
+    types: [rerequested, completed]
 
 jobs:
   run-python-on-pr:
