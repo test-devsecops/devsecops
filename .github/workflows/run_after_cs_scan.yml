@@ -1,25 +1,26 @@
 name: Run Python After Checkmarx Scan
 
 on:
-  status:
+  check_suite:
     types: [completed]
 
 jobs:
-  run-python-if-checkmarx-passed:
-    if: github.event.context == 'Checkmarx Scan' && github.event.state == 'success'
+  run-python-on-pr:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout source branch
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
-      - name: Show target branch
-        run: echo "Branch is ${{ github.event.branches[0].name || github.event.repository.default_branch }}"
-
       - name: Run Python script
-        run: python3 postscan.py
+        run: |
+          echo "Running postscan.py..."
+          python3 .github/scripts/postscan.py
+
