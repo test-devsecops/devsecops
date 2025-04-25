@@ -11,6 +11,7 @@ app.post('/login', (req, res) => {
 
   const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
   console.log("Running query:", query); // Simulate DB query
+  console.log("Test")
   res.send("Logged in (simulated).");
 });
 
