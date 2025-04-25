@@ -18,5 +18,8 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Show target branch
+        run: echo "Branch is ${{ github.event.branches[0].name || github.event.repository.default_branch }}"
+
       - name: Run Python script
         run: python3 postscan.py
