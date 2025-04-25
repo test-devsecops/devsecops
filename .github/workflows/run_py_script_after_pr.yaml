@@ -22,4 +22,4 @@ jobs:
       - name: Run Python script
         run: |
           echo "Running postscan.py..."
-          python3 postscan.py
+          python3 .github/scripts/postscan.py
