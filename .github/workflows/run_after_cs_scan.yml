@@ -6,9 +6,7 @@ on:
 
 jobs:
   run-python-if-checkmarx-passed:
-    if: >
-      github.event.context == 'Checkmarx' &&
-      github.event.state == 'success'
+    if: github.event.context == 'Checkmarx' && github.event.state == 'success'
     runs-on: ubuntu-latest
 
     steps:
