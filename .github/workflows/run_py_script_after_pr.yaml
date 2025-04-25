@@ -12,7 +12,7 @@ jobs:
       - name: Checkout source branch
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.head_ref }}  # This checks out the PR source branch
+          ref: ${{ github.head_ref }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -20,3 +20,6 @@ jobs:
           python-version: '3.x'
 
       - name: Run Python script
+        run: |
+          echo "Running postscan.py..."
+          python3 postscan.py
