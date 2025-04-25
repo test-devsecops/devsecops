@@ -14,7 +14,7 @@ app.post('/login', (req, res) => {
   res.send("Logged in (simulated).");
 });
 
-// Simulated reflected XSS vulnerability - 
+// Simulated reflected XSS vulnerability ---
 app.get('/search', (req, res) => {
   const query = req.query.q;
   res.send(`
