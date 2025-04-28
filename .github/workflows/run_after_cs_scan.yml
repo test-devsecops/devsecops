@@ -1,7 +1,7 @@
 name: Run Python After Checkmarx Scan
 
 on:
-  check_run:
+  workflow_run:
     types: [rerequested, completed]
 
 jobs:
