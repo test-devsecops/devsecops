@@ -1,8 +1,14 @@
 const express = require('express');
 const app = express();
 const port = 3000;
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 app.use(express.urlencoded({ extended: true }));
+
+// Set up multer for file uploads
+const upload = multer({ dest: 'uploads/' });
 
 // Simulated SQL injection vulnerability
 app.post('/login', (req, res) => {
@@ -14,7 +20,7 @@ app.post('/login', (req, res) => {
   res.send("Logged in (simulated).");
 });
 
-// Simulated reflected XSS vulnerability '''''
+// Simulated reflected XSS vulnerability
 app.get('/search', (req, res) => {
   const query = req.query.q;
   res.send(`
@@ -22,6 +28,23 @@ app.get('/search', (req, res) => {
     <p>You searched for: ${query}</p>
     <a href="/">Back</a>
   `);
+});
+
+// Simulated insecure file upload vulnerability
+app.post('/upload', upload.single('file'), (req, res) => {
+  const file = req.file;
+  if (!file) {
+    return res.send("No file uploaded.");
+  }
+
+  const tempPath = file.path;
+  const targetPath = path.join(__dirname, 'uploads', file.originalname); // 🛑 Unsafe: uses original filename directly
+
+  // Move file (no validation)
+  fs.rename(tempPath, targetPath, err => {
+    if (err) return res.send("Upload failed.");
+    res.send(`File uploaded to ${targetPath}`);
+  });
 });
 
 // Home page
@@ -36,6 +59,11 @@ app.get('/', (req, res) => {
     <form method="GET" action="/search">
       <input name="q" placeholder="Search..." />
       <button type="submit">Search</button>
+    </form>
+    <br />
+    <form method="POST" action="/upload" enctype="multipart/form-data">
+      <input type="file" name="file" />
+      <button type="submit">Upload File</button>
     </form>
   `);
 });
