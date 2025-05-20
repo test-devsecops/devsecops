@@ -4,11 +4,31 @@ const port = 3000;
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const axios = require('axios');
 
 app.use(express.urlencoded({ extended: true }));
 
 // Set up multer for file uploads
 const upload = multer({ dest: 'uploads/' });
+
+// Simulated SSRF vulnerability
+app.get('/fetch', async (req, res) => {
+  const targetUrl = req.query.url;
+  if (!targetUrl) {
+    return res.status(400).send("Missing 'url' parameter");
+  }
+
+  try {
+    const response = await axios.get(targetUrl); // 🛑 Dangerous: no URL validation
+    res.send(`
+      <h2>Fetched Content</h2>
+      <pre>${response.data}</pre>
+      <a href="/">Back</a>
+    `);
+  } catch (err) {
+    res.status(500).send("Error fetching URL.");
+  }
+});
 
 // Simulated SQL injection vulnerability
 app.post('/login', (req, res) => {
@@ -64,6 +84,11 @@ app.get('/', (req, res) => {
     <form method="POST" action="/upload" enctype="multipart/form-data">
       <input type="file" name="file" />
       <button type="submit">Upload File</button>
+    </form>
+    <br />
+    <form method="GET" action="/fetch">
+      <input name="url" placeholder="Enter URL to fetch (SSRF)" />
+      <button type="submit">Fetch URL</button>
     </form>
   `);
 });
