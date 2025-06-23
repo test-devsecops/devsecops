@@ -30,7 +30,7 @@ app.get('/fetch', async (req, res) => {
   }
 });
 
-// Simulated SQL injection vulnerability
+// Simulated SQL injection vulnerability - Test
 app.post('/login', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
